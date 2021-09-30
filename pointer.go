@@ -5,23 +5,32 @@ import (
 	"strings"
 )
 
-const separator = "/"
+type (
+	// pointer represents a RFC6901 JSON Pointer.
+	pointer string
 
-// rfc6901Replacer is a replacer used to escape JSON
-// pointer strings in compliance with the JavaScript
-// Object Notation Pointer syntax.
-// https://tools.ietf.org/html/rfc6901
-var rfc6901Replacer = strings.NewReplacer("~", "~0", "/", "~1")
+	jsonNode struct {
+		ptr pointer
+		val interface{}
+	}
+)
 
-type jsonNode struct {
-	ptr pointer
-	val interface{}
+const (
+	emptyPtr = pointer("")
+)
+
+var (
+	separator = "/"
+	// rfc6901Replacer is a replacer used to escape JSON
+	// pointer strings in compliance with the JavaScript
+	// Object Notation Pointer syntax.
+	// https://tools.ietf.org/html/rfc6901
+	rfc6901Replacer = strings.NewReplacer("~", "~0", "/", "~1")
+)
+
+func UpdateSeparator(newSeparator string) {
+	separator = newSeparator
 }
-
-// pointer represents a RFC6901 JSON Pointer.
-type pointer string
-
-const emptyPtr = pointer("")
 
 // String implements the fmt.Stringer interface.
 func (p pointer) String() string {

@@ -2,9 +2,11 @@ package jsondiff
 
 import "encoding/json"
 
-// An Option overrides the default diff behavior of
-// the CompareOpts and CompareJSONOpts function.
-type Option func(*differ)
+type (
+	// An Option overrides the default diff behavior of
+	// the CompareOpts and CompareJSONOpts function.
+	Option func(*differ)
+)
 
 // Compare compares the JSON representations of the
 // given values and returns the differences relative

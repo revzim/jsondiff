@@ -5,6 +5,20 @@ import (
 	"strings"
 )
 
+type (
+	// Operation represents a RFC6902 JSON Patch operation.
+	Operation struct {
+		Type     string      `json:"op"`
+		From     pointer     `json:"from,omitempty"`
+		Field    pointer     `json:"field"`
+		OldValue interface{} `json:"-"`
+		Value    interface{} `json:"value,omitempty"`
+	}
+
+	// Patch represents a series of JSON Patch operations.
+	Patch []Operation
+)
+
 // JSON Patch operation types.
 // These are defined in RFC 6902 section 4.
 const (
@@ -15,15 +29,6 @@ const (
 	OperationCopy    = "copy"
 	OperationTest    = "test"
 )
-
-// Operation represents a RFC6902 JSON Patch operation.
-type Operation struct {
-	Type     string      `json:"op"`
-	From     pointer     `json:"from,omitempty"`
-	Path     pointer     `json:"path"`
-	OldValue interface{} `json:"-"`
-	Value    interface{} `json:"value,omitempty"`
-}
 
 // String implements the fmt.Stringer interface.
 func (o Operation) String() string {
@@ -46,8 +51,21 @@ func (o Operation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(op(o))
 }
 
-// Patch represents a series of JSON Patch operations.
-type Patch []Operation
+// MutableForEach --
+// Loop - manipulate by *
+func (p Patch) MutableForEach(cb func(op *Operation)) {
+	for i := range p {
+		cb(&p[i])
+	}
+}
+
+// ForEach --
+// Loop - immutable
+func (p Patch) ForEach(cb func(op Operation)) {
+	for i := range p {
+		cb(p[i])
+	}
+}
 
 // String implements the fmt.Stringer interface.
 func (p Patch) String() string {
@@ -66,11 +84,14 @@ func (p *Patch) remove(idx int) Patch {
 	return (*p)[:idx+copy((*p)[idx:], (*p)[idx+1:])]
 }
 
-func (p *Patch) append(typ string, from, path pointer, src, tgt interface{}) Patch {
+func (p *Patch) append(typ string, from, field pointer, src, tgt interface{}) Patch {
+	if len(field) > 0 {
+		field = field[1:]
+	}
 	return append(*p, Operation{
 		Type:     typ,
 		From:     from,
-		Path:     path,
+		Field:    field,
 		OldValue: src,
 		Value:    tgt,
 	})

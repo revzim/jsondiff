@@ -7,14 +7,16 @@ import (
 	"strings"
 )
 
-type differ struct {
-	patch       Patch
-	hasher      hasher
-	hashmap     map[uint64]*jsonNode
-	factorize   bool
-	rationalize bool
-	invertible  bool
-}
+type (
+	differ struct {
+		patch       Patch
+		hasher      hasher
+		hashmap     map[uint64]*jsonNode
+		factorize   bool
+		rationalize bool
+		invertible  bool
+	}
+)
 
 func (d *differ) diff(src, tgt interface{}) {
 	if d.factorize {
@@ -112,7 +114,7 @@ func (d *differ) rationalizeLastOps(ptr pointer, src, tgt interface{}, lastOpIdx
 	// replace the source document with the target.
 	replaceOp := Operation{
 		Type:  OperationReplace,
-		Path:  ptr,
+		Field: ptr,
 		Value: tgt,
 	}
 	ops = append(ops, replaceOp)
@@ -144,7 +146,6 @@ func (d *differ) compareObjects(ptr pointer, src, tgt map[string]interface{}) {
 		v := cmpSet[k]
 		inOld := v&(1<<0) != 0
 		inNew := v&(1<<1) != 0
-
 		switch {
 		case inOld && inNew:
 			d.compare(ptr.appendKey(k), src[k], tgt[k])
@@ -193,9 +194,9 @@ func (d *differ) add(ptr pointer, v interface{}) {
 		// The "from" location MUST NOT be a proper prefix
 		// of the "path" location; i.e., a location cannot
 		// be moved into one of its children.
-		if !strings.HasPrefix(ptr.String(), op.Path.String()) {
+		if !strings.HasPrefix(ptr.String(), op.Field.String()) {
 			d.patch = d.patch.remove(idx)
-			d.patch = d.patch.append(OperationMove, op.Path, ptr, v, v)
+			d.patch = d.patch.append(OperationMove, op.Field, ptr, v, v)
 		}
 		return
 	}

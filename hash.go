@@ -8,31 +8,33 @@ import (
 	"strconv"
 )
 
-type hasher struct {
-	mh maphash.Hash
-}
+type (
+	hasher struct {
+		maphash.Hash
+	}
+)
 
 func (h *hasher) digest(val interface{}) uint64 {
-	h.mh.Reset()
+	h.Reset()
 	h.hash(val)
-	return h.mh.Sum64()
+	return h.Sum64()
 }
 
 func (h *hasher) hash(i interface{}) {
 	switch v := i.(type) {
 	case string:
-		h.mh.WriteString(v)
+		h.WriteString(v)
 	case bool:
-		h.mh.WriteString(strconv.FormatBool(v))
+		h.WriteString(strconv.FormatBool(v))
 	case float64:
 		var buf [8]byte
 		binary.BigEndian.PutUint64(buf[:], math.Float64bits(v))
-		h.mh.Write(buf[:])
+		h.Write(buf[:])
 	case nil:
-		h.mh.WriteString("nil")
+		h.WriteString("nil")
 	case []interface{}:
 		for i, e := range v {
-			h.mh.WriteString(strconv.Itoa(i))
+			h.WriteString(strconv.Itoa(i))
 			h.hash(e)
 		}
 	case map[string]interface{}:
@@ -45,7 +47,7 @@ func (h *hasher) hash(i interface{}) {
 		sort.Strings(keys)
 
 		for _, k := range keys {
-			h.mh.WriteString(k)
+			h.WriteString(k)
 			h.hash(v[k])
 		}
 	}
