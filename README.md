@@ -10,9 +10,10 @@ CHANGES FROM jsondiff:
   - MUTABLE & IMMUTABLE
 - OPERATION PATH -> FIELD
 - MUTABLE FIELD SEPARATORS
-  - nested fields follow mutable separator paradigm
-- generic differ append changes
-  - differ append will truncate prepended separator
+  - NESTED FIELDS FOLLOW MUTABLE SPEARATOR PARADIGM
+- GENERIC DIFFER APPEND CHANGES
+  - DIFFER APPEND WILL TRUNCATE INITIAL PREPENDED SEPARATOR
+  - QUICKER KEY PARSING
 
 <h1 align="center">jsondiff</h1>
 <br>
