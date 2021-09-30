@@ -1,10 +1,8 @@
 ## [jsondiff][1]
 
-# FORK OF: [jsondiff][2]
 [1]: https://github.com/revzim/jsondiff
-[2]: https://github.com/wI2L/jsondiff
 
-CHANGES FROM jsondiff:
+CHANGES:
 - GREATER FOCUS ON GENERIC USE
 - FOREACH PATCH HELPERS
   - MUTABLE & IMMUTABLE
