@@ -78,8 +78,8 @@ func runTestCases(t *testing.T, cases []testcase, opts ...Option) {
 				if g, w := op.Type, want.Type; g != w {
 					t.Errorf("op #%d mismatch: op: got %q, want %q", i, g, w)
 				}
-				if g, w := op.Path.String(), want.Path.String(); g != w {
-					t.Errorf("op #%d mismatch: path: got %q, want %q", i, g, w)
+				if g, w := op.Field.String(), want.Field.String(); g != w {
+					t.Errorf("op #%d mismatch: field: got %q, want %q", i, g, w)
 				}
 				switch want.Type {
 				case OperationCopy, OperationMove:

@@ -53,7 +53,7 @@ func ExampleCompare() {
 					Image: "nginx:latest",
 					VolumeMounts: []VolumeMount{{
 						Name:      "shared-data",
-						MountPath: "/usr/share/nginx/html",
+						MountPath: "usr/share/nginx/html",
 					}},
 				}},
 				Volumes: []Volume{{
@@ -81,8 +81,8 @@ func ExampleCompare() {
 		fmt.Printf("%s\n", op)
 	}
 	// Output:
-	// {"op":"replace","path":"/spec/containers/0/image","value":"nginx:1.19.5-alpine"}
-	// {"op":"remove","path":"/spec/volumes/0/emptyDir/medium"}
+	// {"op":"replace","field":"spec/containers/0/image","value":"nginx:1.19.5-alpine"}
+	// {"op":"remove","field":"spec/volumes/0/emptyDir/medium"}
 }
 
 func ExampleCompareJSON() {
@@ -122,8 +122,8 @@ func ExampleCompareJSON() {
 		fmt.Printf("%s\n", op)
 	}
 	// Output:
-	// {"op":"replace","path":"/age","value":30}
-	// {"op":"add","path":"/phoneNumbers/-","value":{"number":"209-212-0015","type":"mobile"}}
+	// {"op":"replace","field":"age","value":30}
+	// {"op":"add","field":"phoneNumbers/-","value":{"number":"209-212-0015","type":"mobile"}}
 }
 
 func ExampleInvertible() {
@@ -142,11 +142,11 @@ func ExampleInvertible() {
 		fmt.Printf("%s\n", op)
 	}
 	// Output:
-	// {"op":"test","path":"/a","value":"1"}
-	// {"op":"replace","path":"/a","value":"3"}
-	// {"op":"test","path":"/b","value":"2"}
-	// {"op":"remove","path":"/b"}
-	// {"op":"add","path":"/c","value":"4"}
+	// {"op":"test","field":"a","value":"1"}
+	// {"op":"replace","field":"a","value":"3"}
+	// {"op":"test","field":"b","value":"2"}
+	// {"op":"remove","field":"b"}
+	// {"op":"add","field":"c","value":"4"}
 }
 
 func ExampleFactorize() {
@@ -165,6 +165,6 @@ func ExampleFactorize() {
 		fmt.Printf("%s\n", op)
 	}
 	// Output:
-	// {"op":"copy","from":"/a","path":"/c"}
-	// {"op":"move","from":"/b","path":"/d"}
+	// {"op":"copy","from":"a","field":"c"}
+	// {"op":"move","from":"b","field":"d"}
 }

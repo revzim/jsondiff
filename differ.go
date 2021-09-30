@@ -2,6 +2,7 @@ package jsondiff
 
 import (
 	"encoding/json"
+	"log"
 	"reflect"
 	"sort"
 	"strings"
@@ -202,6 +203,7 @@ func (d *differ) add(ptr pointer, v interface{}) {
 	}
 	uptr := d.findUnchanged(v)
 	if uptr != emptyPtr && !d.invertible {
+		log.Println(uptr, ptr, nil, v)
 		d.patch = d.patch.append(OperationCopy, uptr, ptr, nil, v)
 	} else {
 		d.patch = d.patch.append(OperationAdd, emptyPtr, ptr, nil, v)
@@ -237,6 +239,9 @@ func (d *differ) findUnchanged(v interface{}) pointer {
 		k := d.hasher.digest(v)
 		node, ok := d.hashmap[k]
 		if ok {
+			if len(node.ptr) > 0 {
+				node.ptr = node.ptr[1:]
+			}
 			return node.ptr
 		}
 	}
